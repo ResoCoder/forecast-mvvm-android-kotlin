@@ -1,4 +1,4 @@
-package com.resocoder.forecastmvvm.data.response
+package com.resocoder.forecastmvvm.data.db.entity
 
 data class Condition(
     val text: String,
