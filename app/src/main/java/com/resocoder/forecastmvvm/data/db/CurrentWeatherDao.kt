@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.resocoder.forecastmvvm.data.db.entity.CURRENT_WEATHER_ID
 import com.resocoder.forecastmvvm.data.db.entity.CurrentWeatherEntry
-import com.resocoder.forecastmvvm.data.db.unitlocalized.ImperialCurrentWeatherEntry
-import com.resocoder.forecastmvvm.data.db.unitlocalized.MetricCurrentWeatherEntry
+import com.resocoder.forecastmvvm.data.db.unitlocalized.current.ImperialCurrentWeatherEntry
+import com.resocoder.forecastmvvm.data.db.unitlocalized.current.MetricCurrentWeatherEntry
 
 
 @Dao

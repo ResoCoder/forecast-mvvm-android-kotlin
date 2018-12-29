@@ -1,4 +1,4 @@
-package com.resocoder.forecastmvvm.data.db.unitlocalized
+package com.resocoder.forecastmvvm.data.db.unitlocalized.current
 
 import androidx.room.ColumnInfo
 
