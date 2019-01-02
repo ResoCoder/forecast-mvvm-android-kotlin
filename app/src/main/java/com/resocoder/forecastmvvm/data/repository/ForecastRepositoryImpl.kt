@@ -22,9 +22,12 @@ class ForecastRepositoryImpl(
     private val locationProvider: LocationProvider
     ) : ForecastRepository {
 
+    private var lastWeatherLocation: WeatherLocation? = null
+    
     init {
         weatherNetworkDataSource.downloadedCurrentWeather.observeForever { newCurrentWeather ->
             persistFetchedCurrentWeather(newCurrentWeather)
+            lastWeatherLocation = newCurrentWeather.location
         }
     }
 
@@ -50,7 +53,6 @@ class ForecastRepositoryImpl(
     }
 
     private suspend fun initWeatherData() {
-        val lastWeatherLocation = weatherLocationDao.getLocation().value
 
         if (lastWeatherLocation == null
             || locationProvider.hasLocationChanged(lastWeatherLocation)) {
