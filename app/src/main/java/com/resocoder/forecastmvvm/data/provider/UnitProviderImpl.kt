@@ -1,8 +1,6 @@
 package com.resocoder.forecastmvvm.data.provider
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import com.resocoder.forecastmvvm.internal.UnitSystem
 
 const val UNIT_SYSTEM = "UNIT_SYSTEM"
