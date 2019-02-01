@@ -1,4 +1,4 @@
-package com.resocoder.forecastmvvm.data.db.unitlocalized.future
+package com.resocoder.forecastmvvm.data.db.unitlocalized.future.list
 
 import org.threeten.bp.LocalDate
 

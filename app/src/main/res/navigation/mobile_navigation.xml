@@ -14,12 +14,20 @@
         android:id="@+id/futureListWeatherFragment"
         android:name="com.resocoder.forecastmvvm.ui.weather.future.list.FutureListWeatherFragment"
         android:label="future_list_weather_fragment"
-        tools:layout="@layout/future_list_weather_fragment" />
+        tools:layout="@layout/future_list_weather_fragment" >
+        <action
+            android:id="@+id/actionDetail"
+            app:destination="@id/futureDetailWeatherFragment" />
+    </fragment>
     <fragment
         android:id="@+id/futureDetailWeatherFragment"
         android:name="com.resocoder.forecastmvvm.ui.weather.future.detail.FutureDetailWeatherFragment"
         android:label="future_detail_weather_fragment"
-        tools:layout="@layout/future_detail_weather_fragment" />
+        tools:layout="@layout/future_detail_weather_fragment" >
+        <argument
+            android:name="dateString"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.resocoder.forecastmvvm.ui.settings.SettingsFragment"

@@ -1,8 +1,8 @@
 package com.resocoder.forecastmvvm.ui.weather.future.list
 
 import com.resocoder.forecastmvvm.R
-import com.resocoder.forecastmvvm.data.db.unitlocalized.future.MetricSimpleFutureWeatherEntry
-import com.resocoder.forecastmvvm.data.db.unitlocalized.future.UnitSpecificSimpleFutureWeatherEntry
+import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.MetricSimpleFutureWeatherEntry
+import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
