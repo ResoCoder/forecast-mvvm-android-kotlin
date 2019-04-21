@@ -16,9 +16,11 @@ interface CurrentWeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(weatherEntry: CurrentWeatherEntry)
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("select * from current_weather where id = $CURRENT_WEATHER_ID")
     fun getWeatherMetric(): LiveData<MetricCurrentWeatherEntry>
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("select * from current_weather where id = $CURRENT_WEATHER_ID")
     fun getWeatherImperial(): LiveData<ImperialCurrentWeatherEntry>
 }
