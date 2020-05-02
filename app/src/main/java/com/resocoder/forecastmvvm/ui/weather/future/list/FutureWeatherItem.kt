@@ -4,6 +4,7 @@ import com.resocoder.forecastmvvm.R
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.MetricSimpleFutureWeatherEntry
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
+import com.resocoder.forecastmvvm.utils.formatConditonUrl
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_future_weather.*
@@ -12,7 +13,7 @@ import org.threeten.bp.format.FormatStyle
 
 
 class FutureWeatherItem(
-    val weatherEntry: UnitSpecificSimpleFutureWeatherEntry
+        val weatherEntry: UnitSpecificSimpleFutureWeatherEntry
 ) : Item() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
@@ -38,7 +39,7 @@ class FutureWeatherItem(
 
     private fun ViewHolder.updateConditionImage() {
         GlideApp.with(this.containerView)
-            .load("http:" + weatherEntry.conditionIconUrl)
-            .into(imageView_condition_icon)
+                .load(formatConditonUrl(weatherEntry.conditionIconUrl))
+                .into(imageView_condition_icon)
     }
 }

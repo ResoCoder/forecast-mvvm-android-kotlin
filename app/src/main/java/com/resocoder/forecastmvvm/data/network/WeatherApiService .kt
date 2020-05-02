@@ -12,9 +12,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-const val API_KEY = "89e8bd89085b41b7a4b142029180210"
+const val API_KEY = "053c944154dc4110b0f23838200804"
 
-//http://api.apixu.com/v1/current.json?key=89e8bd89085b41b7a4b142029180210&q=London&lang=en
+//https://api.weatherapi.com/v1/current.json?key=053c944154dc4110b0f23838200804&q=London&lang=en
 
 interface ApixuWeatherApiService {
 
@@ -25,7 +25,7 @@ interface ApixuWeatherApiService {
     ): Deferred<CurrentWeatherResponse>
 
 
-    // https://api.apixu.com/v1/forecast.json?key=89e8bd89085b41b7a4b142029180210&q=Los%20Angeles&days=1
+    // https://api.weatherapi.com/v1/forecast.json?key=053c944154dc4110b0f23838200804&q=Los%20Angeles&days=1
     @GET("forecast.json")
     fun getFutureWeather(
         @Query("q") location: String,
@@ -59,7 +59,7 @@ interface ApixuWeatherApiService {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://api.apixu.com/v1/")
+                .baseUrl("https://api.weatherapi.com/v1/")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
