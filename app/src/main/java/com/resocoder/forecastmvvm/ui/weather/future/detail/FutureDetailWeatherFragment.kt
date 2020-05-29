@@ -14,6 +14,7 @@ import com.resocoder.forecastmvvm.data.db.LocalDateConverter
 import com.resocoder.forecastmvvm.internal.DateNotFoundException
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
 import com.resocoder.forecastmvvm.ui.base.ScopedFragment
+import com.resocoder.forecastmvvm.utils.formatConditonUrl
 import kotlinx.android.synthetic.main.future_detail_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,13 +30,13 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
     override val kodein by closestKodein()
 
     private val viewModelFactoryInstanceFactory
-            : ((LocalDate) -> FutureDetailWeatherViewModelFactory) by factory()
+            : ((LocalDate) -> FutureDetailWeatherViewModelFactory) by factory<LocalDate, FutureDetailWeatherViewModelFactory>()
 
     private lateinit var viewModel: FutureDetailWeatherViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.future_detail_weather_fragment, container, false)
     }
@@ -44,10 +45,11 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
 
         val safeArgs = arguments?.let { FutureDetailWeatherFragmentArgs.fromBundle(it) }
-        val date = LocalDateConverter.stringToDate(safeArgs?.dateString) ?: throw DateNotFoundException()
+        val date = LocalDateConverter.stringToDate(safeArgs?.dateString)
+                ?: throw DateNotFoundException()
 
         viewModel = ViewModelProviders.of(this, viewModelFactoryInstanceFactory(date))
-            .get(FutureDetailWeatherViewModel::class.java)
+                .get(FutureDetailWeatherViewModel::class.java)
 
         bindUI()
     }
@@ -66,7 +68,7 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
 
             updateDate(weatherEntry.date)
             updateTemperatures(weatherEntry.avgTemperature,
-                weatherEntry.minTemperature, weatherEntry.maxTemperature)
+                    weatherEntry.minTemperature, weatherEntry.maxTemperature)
             updateCondition(weatherEntry.conditionText)
             updatePrecipitation(weatherEntry.totalPrecipitation)
             updateWindSpeed(weatherEntry.maxWindSpeed)
@@ -74,8 +76,8 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
             updateUv(weatherEntry.uv)
 
             GlideApp.with(this@FutureDetailWeatherFragment)
-                .load("http:" + weatherEntry.conditionIconUrl)
-                .into(imageView_condition_icon)
+                    .load(formatConditonUrl(weatherEntry.conditionIconUrl))
+                    .into(imageView_condition_icon)
         })
     }
 
@@ -89,7 +91,7 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
 
     private fun updateDate(date: LocalDate) {
         (activity as? AppCompatActivity)?.supportActionBar?.subtitle =
-            date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
     }
 
     private fun updateTemperatures(temperature: Double, min: Double, max: Double) {

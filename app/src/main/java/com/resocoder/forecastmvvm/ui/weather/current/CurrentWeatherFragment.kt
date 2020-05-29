@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 
@@ -15,6 +16,7 @@ import com.resocoder.forecastmvvm.data.network.ConnectivityInterceptorImpl
 import com.resocoder.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
 import com.resocoder.forecastmvvm.ui.base.ScopedFragment
+import com.resocoder.forecastmvvm.utils.formatConditonUrl
 import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,7 +29,7 @@ import org.kodein.di.generic.instance
 class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     override val kodein by closestKodein()
-    private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
+    private val viewModelFactory: CurrentWeatherViewModelFactory by instance<CurrentWeatherViewModelFactory>()
 
     private lateinit var viewModel: CurrentWeatherViewModel
 
@@ -69,7 +71,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             updateVisibility(it.visibilityDistance)
 
             GlideApp.with(this@CurrentWeatherFragment)
-                .load("http:${it.conditionIconUrl}")
+                .load(formatConditonUrl(it.conditionIconUrl))
                 .into(imageView_condition_icon)
         })
     }
