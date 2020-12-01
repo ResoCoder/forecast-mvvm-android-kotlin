@@ -2,7 +2,6 @@ package com.resocoder.forecastmvvm.data.db.unitlocalized.current
 
 import androidx.room.ColumnInfo
 
-
 data class ImperialCurrentWeatherEntry(
     @ColumnInfo(name = "tempF")
     override val temperature: Double,

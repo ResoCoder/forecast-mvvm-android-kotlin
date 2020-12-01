@@ -3,7 +3,6 @@ package com.resocoder.forecastmvvm.data.db.unitlocalized.future.detail
 import androidx.room.ColumnInfo
 import org.threeten.bp.LocalDate
 
-
 data class MetricDetailFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,

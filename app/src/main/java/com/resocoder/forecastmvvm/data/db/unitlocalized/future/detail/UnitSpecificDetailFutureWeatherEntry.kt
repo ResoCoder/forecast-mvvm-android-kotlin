@@ -2,7 +2,6 @@ package com.resocoder.forecastmvvm.data.db.unitlocalized.future.detail
 
 import org.threeten.bp.LocalDate
 
-
 interface UnitSpecificDetailFutureWeatherEntry {
     val date: LocalDate
     val maxTemperature: Double

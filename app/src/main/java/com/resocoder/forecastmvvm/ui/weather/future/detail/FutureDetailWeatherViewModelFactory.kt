@@ -6,7 +6,6 @@ import com.resocoder.forecastmvvm.data.provider.UnitProvider
 import com.resocoder.forecastmvvm.data.repository.ForecastRepository
 import org.threeten.bp.LocalDate
 
-
 class FutureDetailWeatherViewModelFactory(
     private val detailDate: LocalDate,
     private val forecastRepository: ForecastRepository,

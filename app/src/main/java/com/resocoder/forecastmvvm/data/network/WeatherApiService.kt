@@ -11,32 +11,29 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
-const val API_KEY = "89e8bd89085b41b7a4b142029180210"
-
-//http://api.apixu.com/v1/current.json?key=89e8bd89085b41b7a4b142029180210&q=London&lang=en
-
-interface ApixuWeatherApiService {
+interface WeatherApiService {
 
     @GET("current.json")
-    fun getCurrentWeather(
+    fun getCurrentWeatherAsync(
         @Query("q") location: String,
         @Query("lang") languageCode: String = "en"
     ): Deferred<CurrentWeatherResponse>
 
-
-    // https://api.apixu.com/v1/forecast.json?key=89e8bd89085b41b7a4b142029180210&q=Los%20Angeles&days=1
+    // https://api.weatherapi.com/v1/forecast.json?key=053c944154dc4110b0f23838200804&q=Los%20Angeles&days=1
     @GET("forecast.json")
-    fun getFutureWeather(
+    fun getFutureWeatherAsync(
         @Query("q") location: String,
         @Query("days") days: Int,
         @Query("lang") languageCode: String = "en"
     ): Deferred<FutureWeatherResponse>
 
     companion object {
+        // https://api.weatherapi.com/v1/current.json?key=053c944154dc4110b0f23838200804&q=London&lang=en
+        private const val API_KEY = "053c944154dc4110b0f23838200804"
+
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor
-        ): ApixuWeatherApiService {
+        ): WeatherApiService {
             val requestInterceptor = Interceptor { chain ->
 
                 val url = chain.request()
@@ -59,11 +56,11 @@ interface ApixuWeatherApiService {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://api.apixu.com/v1/")
+                .baseUrl("https://api.weatherapi.com/v1/")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(ApixuWeatherApiService::class.java)
+                .create(WeatherApiService::class.java)
         }
     }
 }

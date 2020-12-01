@@ -8,8 +8,8 @@ import com.resocoder.forecastmvvm.data.db.entity.WeatherLocation
 import com.resocoder.forecastmvvm.data.db.unitlocalized.current.UnitSpecificCurrentWeatherEntry
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.detail.UnitSpecificDetailFutureWeatherEntry
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
-import com.resocoder.forecastmvvm.data.network.FORECAST_DAYS_COUNT
 import com.resocoder.forecastmvvm.data.network.WeatherNetworkDataSource
+import com.resocoder.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
 import com.resocoder.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.resocoder.forecastmvvm.data.network.response.FutureWeatherResponse
 import com.resocoder.forecastmvvm.data.provider.LocationProvider
@@ -27,7 +27,7 @@ class ForecastRepositoryImpl(
     private val weatherLocationDao: WeatherLocationDao,
     private val weatherNetworkDataSource: WeatherNetworkDataSource,
     private val locationProvider: LocationProvider
-    ) : ForecastRepository {
+) : ForecastRepository {
 
     init {
         weatherNetworkDataSource.apply {
@@ -43,8 +43,7 @@ class ForecastRepositoryImpl(
     override suspend fun getCurrentWeather(metric: Boolean): LiveData<out UnitSpecificCurrentWeatherEntry> {
         return withContext(Dispatchers.IO) {
             initWeatherData()
-            return@withContext if (metric) currentWeatherDao.getWeatherMetric()
-            else currentWeatherDao.getWeatherImperial()
+            return@withContext if (metric) currentWeatherDao.getWeatherMetric() else currentWeatherDao.getWeatherImperial()
         }
     }
 
@@ -54,8 +53,9 @@ class ForecastRepositoryImpl(
     ): LiveData<out List<UnitSpecificSimpleFutureWeatherEntry>> {
         return withContext(Dispatchers.IO) {
             initWeatherData()
-            return@withContext if (metric) futureWeatherDao.getSimpleWeatherForecastsMetric(startDate)
-            else futureWeatherDao.getSimpleWeatherForecastsImperial(startDate)
+            return@withContext if (metric) futureWeatherDao.getSimpleWeatherForecastsMetric(
+                startDate
+            ) else futureWeatherDao.getSimpleWeatherForecastsImperial(startDate)
         }
     }
 
@@ -101,8 +101,7 @@ class ForecastRepositoryImpl(
     private suspend fun initWeatherData() {
         val lastWeatherLocation = weatherLocationDao.getLocationNonLive()
 
-        if (lastWeatherLocation == null
-            || locationProvider.hasLocationChanged(lastWeatherLocation)) {
+        if (lastWeatherLocation == null || locationProvider.hasLocationChanged(lastWeatherLocation)) {
             fetchCurrentWeather()
             fetchFutureWeather()
             return
@@ -137,6 +136,6 @@ class ForecastRepositoryImpl(
     private fun isFetchFutureNeeded(): Boolean {
         val today = LocalDate.now()
         val futureWeatherCount = futureWeatherDao.countFutureWeather(today)
-        return futureWeatherCount < FORECAST_DAYS_COUNT
+        return futureWeatherCount < WeatherNetworkDataSourceImpl.FORECAST_DAYS_COUNT
     }
 }

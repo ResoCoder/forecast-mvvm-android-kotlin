@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import com.resocoder.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.resocoder.forecastmvvm.data.network.response.FutureWeatherResponse
 
-
 interface WeatherNetworkDataSource {
     val downloadedCurrentWeather: LiveData<CurrentWeatherResponse>
     val downloadedFutureWeather: LiveData<FutureWeatherResponse>
@@ -13,6 +12,7 @@ interface WeatherNetworkDataSource {
         location: String,
         languageCode: String
     )
+
     suspend fun fetchFutureWeather(
         location: String,
         languageCode: String

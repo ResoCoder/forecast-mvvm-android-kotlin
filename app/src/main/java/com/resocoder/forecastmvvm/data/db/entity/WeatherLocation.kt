@@ -7,8 +7,6 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 
-const val WEATHER_LOCATION_ID = 0
-
 @Entity(tableName = "weather_location")
 data class WeatherLocation(
     val name: String,
@@ -30,4 +28,8 @@ data class WeatherLocation(
             val zoneId = ZoneId.of(tzId)
             return ZonedDateTime.ofInstant(instant, zoneId)
         }
+
+    companion object {
+        const val WEATHER_LOCATION_ID = 0
+    }
 }
