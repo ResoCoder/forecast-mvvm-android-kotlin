@@ -7,10 +7,8 @@ import com.resocoder.forecastmvvm.data.network.response.CurrentWeatherResponse
 import com.resocoder.forecastmvvm.data.network.response.FutureWeatherResponse
 import com.resocoder.forecastmvvm.internal.NoConnectivityException
 
-const val FORECAST_DAYS_COUNT = 7
-
 class WeatherNetworkDataSourceImpl(
-    private val apixuWeatherApiService: ApixuWeatherApiService
+    private val weatherApiService: WeatherApiService
 ) : WeatherNetworkDataSource {
 
     private val _downloadedCurrentWeather = MutableLiveData<CurrentWeatherResponse>()
@@ -19,8 +17,8 @@ class WeatherNetworkDataSourceImpl(
 
     override suspend fun fetchCurrentWeather(location: String, languageCode: String) {
         try {
-            val fetchedCurrentWeather = apixuWeatherApiService
-                .getCurrentWeather(location, languageCode)
+            val fetchedCurrentWeather = weatherApiService
+                .getCurrentWeatherAsync(location, languageCode)
                 .await()
             _downloadedCurrentWeather.postValue(fetchedCurrentWeather)
         }
@@ -38,13 +36,16 @@ class WeatherNetworkDataSourceImpl(
         languageCode: String
     ) {
         try {
-            val fetchedFutureWeather = apixuWeatherApiService
-                .getFutureWeather(location, FORECAST_DAYS_COUNT, languageCode)
+            val fetchedFutureWeather = weatherApiService
+                .getFutureWeatherAsync(location, FORECAST_DAYS_COUNT, languageCode)
                 .await()
             _downloadedFutureWeather.postValue(fetchedFutureWeather)
-        }
-        catch (e: NoConnectivityException) {
+        } catch (e: NoConnectivityException) {
             Log.e("Connectivity", "No internet connection.", e)
         }
+    }
+
+    companion object {
+        const val FORECAST_DAYS_COUNT = 7
     }
 }

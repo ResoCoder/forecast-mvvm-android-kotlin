@@ -1,6 +1,5 @@
 package com.resocoder.forecastmvvm.data.db.unitlocalized.current
 
-
 interface UnitSpecificCurrentWeatherEntry {
     val temperature: Double
     val conditionText: String

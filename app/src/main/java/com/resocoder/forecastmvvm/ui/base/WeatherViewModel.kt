@@ -6,7 +6,6 @@ import com.resocoder.forecastmvvm.data.repository.ForecastRepository
 import com.resocoder.forecastmvvm.internal.UnitSystem
 import com.resocoder.forecastmvvm.internal.lazyDeferred
 
-
 abstract class WeatherViewModel(
     private val forecastRepository: ForecastRepository,
     unitProvider: UnitProvider

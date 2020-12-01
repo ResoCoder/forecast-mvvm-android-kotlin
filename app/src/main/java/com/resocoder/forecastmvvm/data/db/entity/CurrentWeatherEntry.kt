@@ -5,8 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-const val CURRENT_WEATHER_ID = 0
-
 @Entity(tableName = "current_weather")
 data class CurrentWeatherEntry(
     @SerializedName("temp_c")
@@ -38,4 +36,8 @@ data class CurrentWeatherEntry(
 ) {
     @PrimaryKey(autoGenerate = false)
     var id: Int = CURRENT_WEATHER_ID
+
+    companion object {
+        const val CURRENT_WEATHER_ID = 0
+    }
 }

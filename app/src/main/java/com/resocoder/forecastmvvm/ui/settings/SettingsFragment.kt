@@ -17,5 +17,4 @@ class SettingsFragment : PreferenceFragmentCompat() {
         (activity as? AppCompatActivity)?.supportActionBar?.title = "Settings"
         (activity as? AppCompatActivity)?.supportActionBar?.subtitle = null
     }
-
 }

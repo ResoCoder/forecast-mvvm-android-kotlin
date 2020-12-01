@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.resocoder.forecastmvvm.R
+import com.resocoder.forecastmvvm.databinding.CurrentWeatherFragmentBinding
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
 import com.resocoder.forecastmvvm.ui.base.ScopedFragment
-import kotlinx.android.synthetic.main.current_weather_fragment.*
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -21,13 +21,16 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     override val kodein by closestKodein()
     private val viewModelFactory: CurrentWeatherViewModelFactory by instance()
 
+    private var _binding: CurrentWeatherFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: CurrentWeatherViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.current_weather_fragment, container, false)
+    ): View {
+        _binding = CurrentWeatherFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,13 +49,14 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
         weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if (location == null) return@Observer
+
             updateLocation(location.name)
         })
 
         currentWeather.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
-            group_loading.visibility = View.GONE
+            binding.groupLoading.visibility = View.GONE
             updateDateToToday()
             updateTemperatures(it.temperature, it.feelsLikeTemperature)
             updateCondition(it.conditionText)
@@ -62,7 +66,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
             GlideApp.with(this@CurrentWeatherFragment)
                 .load("https:${it.conditionIconUrl}")
-                .into(imageView_condition_icon)
+                .into(binding.imageViewConditionIcon)
         })
     }
 
@@ -80,26 +84,31 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     private fun updateTemperatures(temperature: Double, feelsLike: Double) {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("°C", "°F")
-        textView_temperature.text = "$temperature$unitAbbreviation"
-        textView_feels_like_temperature.text = "Feels like $feelsLike$unitAbbreviation"
+        binding.textViewTemperature.text =
+            getString(R.string.temperature_template, temperature, unitAbbreviation)
+        binding.textViewFeelsLikeTemperature.text =
+            getString(R.string.feels_like_template, feelsLike, unitAbbreviation)
     }
 
     private fun updateCondition(condition: String) {
-        textView_condition.text = condition
+        binding.textViewCondition.text = condition
     }
 
     private fun updatePrecipitation(precipitationVolume: Double) {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("mm", "in")
-        textView_precipitation.text = "Precipitation: $precipitationVolume $unitAbbreviation"
+        binding.textViewPrecipitation.text =
+            getString(R.string.precipitation_template, precipitationVolume, unitAbbreviation)
     }
 
     private fun updateWind(windDirection: String, windSpeed: Double) {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("kph", "mph")
-        textView_wind.text = "Wind: $windDirection, $windSpeed $unitAbbreviation"
+        binding.textViewWind.text =
+            getString(R.string.wind_template, windDirection, windSpeed, unitAbbreviation)
     }
 
     private fun updateVisibility(visibilityDistance: Double) {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("km", "mi.")
-        textView_visibility.text = "Visibility: $visibilityDistance $unitAbbreviation"
+        binding.textViewVisibility.text =
+            getString(R.string.visibility_template, visibilityDistance, unitAbbreviation)
     }
 }

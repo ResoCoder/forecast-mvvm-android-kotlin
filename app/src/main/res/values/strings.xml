@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Forecast MVVM</string>
-    <string name="temperature_template">%s1%s2</string>
+    <string name="temperature_template">%.1f%s</string>
+    <string name="temperature_min_max_template">Min: %1$.1f%3$s Max: %2$.1f%3$s</string>
+    <string name="feels_like_template">Feels like %.1f%s</string>
+    <string name="precipitation_template">Precipitation: %.1f %s</string>
+    <string name="wind_template">Wind: %s %.1f %s</string>
+    <string name="wind_speed_template">Wind: %.1f %s</string>
+    <string name="visibility_template">Visibility: %.1f %s</string>
+    <string name="uv_template">UV: %.1f</string>
 </resources>

@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.resocoder.forecastmvvm.data.db.entity.WeatherLocation
 import com.resocoder.forecastmvvm.internal.LocationPermissionNotGrantedException
-import com.resocoder.forecastmvvm.internal.asDeferred
+import com.resocoder.forecastmvvm.internal.asDeferredAsync
 import kotlinx.coroutines.Deferred
 
 const val USE_DEVICE_LOCATION = "USE_DEVICE_LOCATION"
@@ -78,7 +78,7 @@ class LocationProviderImpl(
     @SuppressLint("MissingPermission")
     private fun getLastDeviceLocation(): Deferred<Location?> {
         return if (hasLocationPermission())
-            fusedLocationProviderClient.lastLocation.asDeferred()
+            fusedLocationProviderClient.lastLocation.asDeferredAsync()
         else
             throw LocationPermissionNotGrantedException()
     }

@@ -3,8 +3,7 @@ package com.resocoder.forecastmvvm.data.db.unitlocalized.future.list
 import androidx.room.ColumnInfo
 import org.threeten.bp.LocalDate
 
-
-class ImperialSimpleFutureWeatherEntry (
+class ImperialSimpleFutureWeatherEntry(
     @ColumnInfo(name = "date")
     override val date: LocalDate,
     @ColumnInfo(name = "avgtempF")

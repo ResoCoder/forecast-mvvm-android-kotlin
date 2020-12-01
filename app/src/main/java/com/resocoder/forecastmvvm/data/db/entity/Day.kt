@@ -2,7 +2,6 @@ package com.resocoder.forecastmvvm.data.db.entity
 
 import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
-import com.resocoder.forecastmvvm.data.db.entity.Condition
 
 data class Day(
     @SerializedName("avgtemp_c")

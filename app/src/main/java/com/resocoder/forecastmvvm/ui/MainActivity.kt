@@ -14,7 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.resocoder.forecastmvvm.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.resocoder.forecastmvvm.databinding.ActivityMainBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
@@ -26,19 +26,21 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein by closestKodein()
     private val fusedLocationProviderClient: FusedLocationProviderClient by instance()
 
-    private val locationCallback = object : LocationCallback() {
-    }
+    private val locationCallback = object : LocationCallback() {}
+
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
 
-        bottom_nav.setupWithNavController(navController)
+        binding.bottomNav.setupWithNavController(navController)
 
         NavigationUI.setupActionBarWithNavController(this, navController)
 

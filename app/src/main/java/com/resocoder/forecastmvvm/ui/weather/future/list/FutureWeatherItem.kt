@@ -1,22 +1,25 @@
 package com.resocoder.forecastmvvm.ui.weather.future.list
 
-
+import android.view.View
 import com.resocoder.forecastmvvm.R
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.MetricSimpleFutureWeatherEntry
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
+import com.resocoder.forecastmvvm.databinding.ItemFutureWeatherBinding
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
-import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import kotlinx.android.synthetic.main.item_future_weather.*
+import com.xwray.groupie.viewbinding.BindableItem
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 class FutureWeatherItem(
-    val weatherEntry: UnitSpecificSimpleFutureWeatherEntry
-) : Item() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.apply {
-            textView_condition.text = weatherEntry.conditionText
+    val weatherEntry: UnitSpecificSimpleFutureWeatherEntry,
+) : BindableItem<ItemFutureWeatherBinding>() {
+    override fun initializeViewBinding(view: View): ItemFutureWeatherBinding {
+        return ItemFutureWeatherBinding.bind(view)
+    }
+
+    override fun bind(viewBinding: ItemFutureWeatherBinding, position: Int) {
+        viewBinding.apply {
+            textViewCondition.text = weatherEntry.conditionText
             updateDate()
             updateTemperature()
             updateConditionImage()
@@ -25,19 +28,23 @@ class FutureWeatherItem(
 
     override fun getLayout() = R.layout.item_future_weather
 
-    private fun ViewHolder.updateDate() {
+    private fun ItemFutureWeatherBinding.updateDate() {
         val dtFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-        textView_date.text = weatherEntry.date.format(dtFormatter)
+        textViewDate.text = weatherEntry.date.format(dtFormatter)
     }
 
-    private fun ViewHolder.updateTemperature() {
+    private fun ItemFutureWeatherBinding.updateTemperature() {
         val unitAbbreviation = if (weatherEntry is MetricSimpleFutureWeatherEntry) "°C" else "°F"
-        textView_temperature.text = "${weatherEntry.avgTemperature}$unitAbbreviation"
+        textViewTemperature.text = root.context.getString(
+            R.string.temperature_template,
+            weatherEntry.avgTemperature,
+            unitAbbreviation
+        )
     }
 
-    private fun ViewHolder.updateConditionImage() {
-        GlideApp.with(this.containerView)
+    private fun ItemFutureWeatherBinding.updateConditionImage() {
+        GlideApp.with(root)
             .load("https:" + weatherEntry.conditionIconUrl)
-            .into(imageView_condition_icon)
+            .into(imageViewConditionIcon)
     }
 }

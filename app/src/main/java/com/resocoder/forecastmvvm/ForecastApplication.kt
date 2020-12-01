@@ -26,33 +26,34 @@ class ForecastApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@ForecastApplication))
 
+        // database
         bind() from singleton { ForecastDatabase(instance()) }
         bind() from singleton { instance<ForecastDatabase>().currentWeatherDao() }
         bind() from singleton { instance<ForecastDatabase>().futureWeatherDao() }
         bind() from singleton { instance<ForecastDatabase>().weatherLocationDao() }
+
+        // network
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
-        bind() from singleton { ApixuWeatherApiService(instance()) }
+        bind() from singleton { WeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
+
+        // location
         bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>()) }
         bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
+
+        // repository
         bind<ForecastRepository>() with singleton {
-            ForecastRepositoryImpl(
-                instance(),
-                instance(),
-                instance(),
-                instance(),
-                instance()
-            )
+            ForecastRepositoryImpl(instance(), instance(), instance(), instance(), instance())
         }
+
+        // provider
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
+
+        // view model factory
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
         bind() from provider { FutureListWeatherViewModelFactory(instance(), instance()) }
         bind() from factory { detailDate: LocalDate ->
-            FutureDetailWeatherViewModelFactory(
-                detailDate,
-                instance(),
-                instance()
-            )
+            FutureDetailWeatherViewModelFactory(detailDate, instance(), instance())
         }
     }
 

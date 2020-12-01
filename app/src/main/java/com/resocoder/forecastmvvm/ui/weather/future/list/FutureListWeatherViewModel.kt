@@ -1,6 +1,5 @@
 package com.resocoder.forecastmvvm.ui.weather.future.list
 
-import androidx.lifecycle.ViewModel;
 import com.resocoder.forecastmvvm.data.provider.UnitProvider
 import com.resocoder.forecastmvvm.data.repository.ForecastRepository
 import com.resocoder.forecastmvvm.internal.lazyDeferred
