@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Forecast MVVM</string>
+    <string name="temperature_template">%s1%s2</string>
 </resources>

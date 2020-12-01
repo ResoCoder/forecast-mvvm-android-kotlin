@@ -1,16 +1,14 @@
 package com.resocoder.forecastmvvm.ui.weather.future.list
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.resocoder.forecastmvvm.R
 import com.resocoder.forecastmvvm.data.db.LocalDateConverter
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
@@ -41,7 +39,7 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        viewModel = ViewModelProvider(this, viewModelFactory)
             .get(FutureListWeatherViewModel::class.java)
         bindUI()
     }
@@ -50,12 +48,12 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
         val futureWeatherEntries = viewModel.weatherEntries.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@FutureListWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if (location == null) return@Observer
             updateLocation(location.name)
         })
 
-        futureWeatherEntries.observe(this@FutureListWeatherFragment, Observer { weatherEntries ->
+        futureWeatherEntries.observe(viewLifecycleOwner, Observer { weatherEntries ->
             if (weatherEntries == null) return@Observer
 
             group_loading.visibility = View.GONE
@@ -73,7 +71,7 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
         (activity as? AppCompatActivity)?.supportActionBar?.subtitle = "Next Week"
     }
 
-    private fun List<UnitSpecificSimpleFutureWeatherEntry>.toFutureWeatherItems() : List<FutureWeatherItem> {
+    private fun List<UnitSpecificSimpleFutureWeatherEntry>.toFutureWeatherItems(): List<FutureWeatherItem> {
         return this.map {
             FutureWeatherItem(it)
         }
@@ -101,6 +99,4 @@ class FutureListWeatherFragment : ScopedFragment(), KodeinAware {
         val actionDetail = FutureListWeatherFragmentDirections.actionDetail(dateString)
         Navigation.findNavController(view).navigate(actionDetail)
     }
-
-
 }

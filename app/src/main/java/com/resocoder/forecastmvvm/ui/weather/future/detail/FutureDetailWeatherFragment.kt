@@ -1,14 +1,12 @@
 package com.resocoder.forecastmvvm.ui.weather.future.detail
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-
+import androidx.lifecycle.ViewModelProvider
 import com.resocoder.forecastmvvm.R
 import com.resocoder.forecastmvvm.data.db.LocalDateConverter
 import com.resocoder.forecastmvvm.internal.DateNotFoundException
@@ -29,7 +27,7 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
     override val kodein by closestKodein()
 
     private val viewModelFactoryInstanceFactory
-            : ((LocalDate) -> FutureDetailWeatherViewModelFactory) by factory()
+        : ((LocalDate) -> FutureDetailWeatherViewModelFactory) by factory()
 
     private lateinit var viewModel: FutureDetailWeatherViewModel
 
@@ -44,9 +42,10 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
         super.onActivityCreated(savedInstanceState)
 
         val safeArgs = arguments?.let { FutureDetailWeatherFragmentArgs.fromBundle(it) }
-        val date = LocalDateConverter.stringToDate(safeArgs?.dateString) ?: throw DateNotFoundException()
+        val date =
+            LocalDateConverter.stringToDate(safeArgs?.dateString) ?: throw DateNotFoundException()
 
-        viewModel = ViewModelProviders.of(this, viewModelFactoryInstanceFactory(date))
+        viewModel = ViewModelProvider(this, viewModelFactoryInstanceFactory(date))
             .get(FutureDetailWeatherViewModel::class.java)
 
         bindUI()
@@ -56,17 +55,19 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
         val futureWeather = viewModel.weather.await()
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@FutureDetailWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if (location == null) return@Observer
             updateLocation(location.name)
         })
 
-        futureWeather.observe(this@FutureDetailWeatherFragment, Observer { weatherEntry ->
+        futureWeather.observe(viewLifecycleOwner, Observer { weatherEntry ->
             if (weatherEntry == null) return@Observer
 
             updateDate(weatherEntry.date)
-            updateTemperatures(weatherEntry.avgTemperature,
-                weatherEntry.minTemperature, weatherEntry.maxTemperature)
+            updateTemperatures(
+                weatherEntry.avgTemperature,
+                weatherEntry.minTemperature, weatherEntry.maxTemperature
+            )
             updateCondition(weatherEntry.conditionText)
             updatePrecipitation(weatherEntry.totalPrecipitation)
             updateWindSpeed(weatherEntry.maxWindSpeed)
@@ -74,7 +75,7 @@ class FutureDetailWeatherFragment : ScopedFragment(), KodeinAware {
             updateUv(weatherEntry.uv)
 
             GlideApp.with(this@FutureDetailWeatherFragment)
-                .load("http:" + weatherEntry.conditionIconUrl)
+                .load("https:${weatherEntry.conditionIconUrl}")
                 .into(imageView_condition_icon)
         })
     }

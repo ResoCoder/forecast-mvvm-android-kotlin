@@ -1,25 +1,17 @@
 package com.resocoder.forecastmvvm.ui.weather.current
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-
+import androidx.lifecycle.ViewModelProvider
 import com.resocoder.forecastmvvm.R
-import com.resocoder.forecastmvvm.data.network.ApixuWeatherApiService
-import com.resocoder.forecastmvvm.data.network.ConnectivityInterceptorImpl
-import com.resocoder.forecastmvvm.data.network.WeatherNetworkDataSourceImpl
 import com.resocoder.forecastmvvm.internal.glide.GlideApp
 import com.resocoder.forecastmvvm.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.current_weather_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
@@ -41,7 +33,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        viewModel = ViewModelProvider(this, viewModelFactory)
             .get(CurrentWeatherViewModel::class.java)
 
         bindUI()
@@ -52,12 +44,12 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
         val weatherLocation = viewModel.weatherLocation.await()
 
-        weatherLocation.observe(this@CurrentWeatherFragment, Observer { location ->
+        weatherLocation.observe(viewLifecycleOwner, Observer { location ->
             if (location == null) return@Observer
             updateLocation(location.name)
         })
 
-        currentWeather.observe(this@CurrentWeatherFragment, Observer {
+        currentWeather.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
 
             group_loading.visibility = View.GONE
@@ -69,7 +61,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             updateVisibility(it.visibilityDistance)
 
             GlideApp.with(this@CurrentWeatherFragment)
-                .load("http:${it.conditionIconUrl}")
+                .load("https:${it.conditionIconUrl}")
                 .into(imageView_condition_icon)
         })
     }
@@ -98,7 +90,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     private fun updatePrecipitation(precipitationVolume: Double) {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("mm", "in")
-        textView_precipitation.text = "Preciptiation: $precipitationVolume $unitAbbreviation"
+        textView_precipitation.text = "Precipitation: $precipitationVolume $unitAbbreviation"
     }
 
     private fun updateWind(windDirection: String, windSpeed: Double) {
@@ -110,5 +102,4 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         val unitAbbreviation = chooseLocalizedUnitAbbreviation("km", "mi.")
         textView_visibility.text = "Visibility: $visibilityDistance $unitAbbreviation"
     }
-
 }

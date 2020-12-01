@@ -1,5 +1,6 @@
 package com.resocoder.forecastmvvm.ui.weather.future.list
 
+
 import com.resocoder.forecastmvvm.R
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.MetricSimpleFutureWeatherEntry
 import com.resocoder.forecastmvvm.data.db.unitlocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
@@ -9,7 +10,6 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.item_future_weather.*
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
-
 
 class FutureWeatherItem(
     val weatherEntry: UnitSpecificSimpleFutureWeatherEntry
@@ -31,14 +31,13 @@ class FutureWeatherItem(
     }
 
     private fun ViewHolder.updateTemperature() {
-        val unitAbbreviation = if (weatherEntry is MetricSimpleFutureWeatherEntry) "°C"
-        else "°F"
+        val unitAbbreviation = if (weatherEntry is MetricSimpleFutureWeatherEntry) "°C" else "°F"
         textView_temperature.text = "${weatherEntry.avgTemperature}$unitAbbreviation"
     }
 
     private fun ViewHolder.updateConditionImage() {
         GlideApp.with(this.containerView)
-            .load("http:" + weatherEntry.conditionIconUrl)
+            .load("https:" + weatherEntry.conditionIconUrl)
             .into(imageView_condition_icon)
     }
 }

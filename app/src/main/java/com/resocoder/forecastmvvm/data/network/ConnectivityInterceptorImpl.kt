@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import com.resocoder.forecastmvvm.internal.NoConnectivityException
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 
 class ConnectivityInterceptorImpl(
     context: Context
@@ -20,8 +19,8 @@ class ConnectivityInterceptorImpl(
     }
 
     private fun isOnline(): Boolean {
-        val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE)
-        as ConnectivityManager
+        val connectivityManager =
+            appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
